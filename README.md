@@ -18,6 +18,6 @@ DB_PORT = '5432'
 DB_API_KEY ='a646d1b0-29dd-41db-9bbd-78cf5d24c13e'
 ```
 
-###For frontend(Client):
+### For frontend(Client):
 
-* Create it and commit it xD 
+* Create it and commit it xD
