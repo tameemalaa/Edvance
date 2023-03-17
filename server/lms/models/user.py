@@ -29,7 +29,7 @@ class UserRole(models.Model):
         (0, "Super Admin"),
         (1, "Admin"),
         (2, "Teacher"),
-        (3, "Teaching Assitant"),
+        (3, "Teaching Assistant"),
         (4, "Student"),
     ]
     role = models.CharField(max_length=1, choices=ROLE_CHOICES)
