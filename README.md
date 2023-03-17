@@ -4,7 +4,7 @@
 
 * Create your virtual environment `venv` and install the `requirements.txt`
 
-* Please create `.env` file at `/server/server` and paste the following.
+* Please create `.env` file at `/server` and paste the following.
 
 ```python
 SECRET_KEY = "django-insecure-un6mxt#85eik$l95pynw)4gb-vlp4f37cg*i($)oag*8(bxht$"
