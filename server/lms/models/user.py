@@ -6,7 +6,7 @@ class User(models.model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
-    password = ""  # TODO: add password field or let it be handled by auth system ? 
+    password = models.CharField(max_length=255) 
     phone = models.CharField(
         max_length=255
     )  # TODO : a better way is possible with a third party library
