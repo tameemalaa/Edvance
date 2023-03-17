@@ -3,7 +3,7 @@ from .user import User
 
 
 class Course(models.Model):
-    professor_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    professor = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
     semester = models.CharField(
         max_length=255
