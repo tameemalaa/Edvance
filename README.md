@@ -20,4 +20,6 @@ DB_API_KEY ='a646d1b0-29dd-41db-9bbd-78cf5d24c13e'
 
 ### For frontend(Client):
 
-* Create it and commit it xD
+at `/client`:
+* run `npm install`
+* runn `npm run serve`
