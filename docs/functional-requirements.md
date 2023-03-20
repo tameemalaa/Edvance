@@ -1,11 +1,7 @@
 # Functional Requirements Document Template for Learning Management System Graduation Project
-
 ## Introduction
-
 - The purpose and scope of the document: Outline the non-functional requirements for the Learning Management System (LMS) graduation project.
-
  ## 1. User Management 
-
 - ### User registration page 
     - The user registration page must contain fields for email address , password , first name , last name and other required information. 
     - The user registration page must support sign up as a student , teacher or teacher assistant. 
@@ -54,22 +50,18 @@
   - The system should provide filters to help students find the relevant course materials quickly.
   - The system should provide search mechanism to easily navigate course materials. 
   - The system should provide error messages and notifications to inform users of any issues with uploading, downloading, or accessing course materials.
-
-
 ## 3. Assignments management
   - ### Teacher management:
     - The system must allow the teacher must to create and manage assignments, including specifying assignment details, requirements, and grading criteria.
     - The system must allow the teacher must to filter and sort assignments based on various criteria, such as submission date or assignment type.
     - The system must allow the teacher must to download assignments submitted by students.
-
 - ### Student access
   - The system must allow students to view and submit assignments, including uploading assignment files and viewing assignment details.
   - The system must allow students to view their grades and feedback for each assignment.
   - The system must allow students to download their graded assignments and feedback.
   - Security measures in place to prevent unauthorized access or modification of assignments, grades, and feedback.
   - The system must allow student to receive notifications when assignments are created, submitted, graded, or updated.
-  
-## 4. Exam management
+  ## 4. Exam management
 -  The system must allow teachers to create and manage quizzes and exams, including setting questions, response options, and time and length of the quiz or exam.
 -  The system must allow students to take quizzes and exams, including selecting the quiz or exam, entering their answers, and submitting their responses.
 -  The system must automatically grade quizzes and exams and provide feedback to students in the case of multiple choice questions.
@@ -79,7 +71,6 @@
 -  The system must allow teachers to view and export quiz and exam results for analysis and record-keeping purposes.
 -  The system must have security measures in place to prevent unauthorized access or modification of quizzes, exams, and results.
 -  The system must provide a user-friendly interface for both teachers and students to access and interact with the quizzes and exams features.
-
 ## 5. Attendance Management 
 - The system must allow teachers to create and manage attendance records for their courses,  specifying the class, date and recording the attendance of each student.
 - The system must allow teachers to create an automatic attendance collector that students can log into using their credentials .   
@@ -88,15 +79,13 @@
 - The system must provide notifications to teachers and students when attendance is recorded or updated. 
 - The system must have security measures in place to prevent unauthorized access or modification of attendance records.
 - The system must allow teachers to export attendance records in various formats, such as PDF or CSV, for record-keeping purposes.
-- The system must provide a user-friendly interface for teachers and students to access and interact with the attendance management features.
-
+- The system must provide a user-friendly interface for teachers and students to access and interact with the attendance management features. 
 ## 6. TODO tracking 
 - The system must provide an interface to the student to track their assigned class work and their deadlines. 
 - The system must provide a user-friendly interface for students and teachers to add, delete, prioritize, and update tasks in their to-do lists.
 - The system must allow students and teachers to receive reminders and notifications for upcoming deadlines.
 - The system must allow students and teachers to view their completed and upcoming tasks.
 - The system must have security measures in place to prevent unauthorized access or modification of tasks and deadlines.
-
 ## 7. Performance tracking 
 - The system must allow teachers to view and analyze student performance data on assignments, quizzes, and exams.
 - The system must allow students to view their own performance data on assignments, quizzes, and exams.
@@ -104,8 +93,7 @@
 - The system must provide visual representations of performance data, such as graphs or charts, to assist with analysis and understanding.
 - The system must have filtering and sorting capabilities to allow teachers to view performance data by assignment type, class, or other criteria.
 - The system must have the ability to provide recommendations for additional support or interventions based on student performance data.
-
-## 8. Posts and comments 
+- ## 8. Posts and comments 
 - The system must allow teachers to create posts and announcements, including specifying the title, content, and relevant course or class.
 - The system must allow teachers to schedule posts and announcements to be published at a future date and time.
 - The system must allow teachers to edit or delete their own posts and announcements.
@@ -115,7 +103,6 @@
 - The system must notify teachers when new comments are added to their posts or announcements.
 - The system must allow teachers to moderate comments.
 - The system must have security measures in place to prevent unauthorized access or modification of posts and comments.
-
 ## 9. Notification system 
 - The system should provide automated notifications to students about upcoming assignments, quizzes, and other important course events.
 - The system should include an option for students to turn off notifications for specific courses or events.
@@ -123,7 +110,6 @@
 - The interface should allow teachers to select the recipients of the notification (e.g., specific students, entire class).
 - The interface should allow teachers to schedule notifications for a specific date and time.
 - The system should allow students to manage their notification preferences and turn off notifications for specific courses or events.
-
 ## 10. Automated exam creation
 - The system should provide an automated exam creation interface that samples weighted question from a test bank.  
 - The automated exam creation system must be able to randomly select questions from a test bank and generate an exam for a specified course.
@@ -134,13 +120,11 @@
 - The system should provide teachers with the ability to review and analyze exam results, including individual student performance and overall exam statistics.
 - The system should allow teachers to manage the test bank by adding, removing, or updating questions as needed.
 - The system should provide user-friendly interfaces for teachers to access and use the automated exam creation system.
-
 ## 11. Automated Grading 
 - The system must provide support for automated grading for exam , quiz or assignment questions with definitive answer keys. 
 - The system must allow teachers to upload answer keys for supported question types. 
 - The system shall automatically grade submitted assignments, quizzes, and exams based on the uploaded answer keys.
 - The system shall provide students with immediate feedback on their assignments, quizzes, and exams, including their scores and any incorrect answers.
-
 ## 12. Student toolbox 
 - The system should provide student with a toolbox to accelerate common tasks for students. 
 - The toolbox should include a cloud-based IDE to allow students to directly work on and submit their programming assignments.
@@ -148,30 +132,3 @@
 - The time tracking tool should allow students to track the time spent on different tasks related to their coursework, and should provide helpful insights such as reports and graphs to help students improve their time management skills.
 - The toolbox should be customizable so that students can add or remove tools as needed.
 - The toolbox should be designed with a user-friendly interface that is easy to navigate and use.
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-    
