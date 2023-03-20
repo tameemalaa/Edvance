@@ -6,4 +6,7 @@ from .assignment import Assignment
 from .question import Question
 from .course_work import CourseWork
 from .quiz import Quiz
+from .submission import Submission, assignmentSubmission, quizSubmission
+from .attendance import Attendance
+from .content import Content
 
