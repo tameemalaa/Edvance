@@ -9,12 +9,11 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   parserOptions: {
-    parser: "@babel/eslint-parser",
+    ecmaVersion: 2020,
   },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    'prettier/prettier': 0,
   },
   overrides: [
     {
