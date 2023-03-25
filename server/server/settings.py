@@ -35,7 +35,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "lms.apps.LmsConfig",
+    "attendance.apps.AttendanceConfig",
+    "courses.apps.CoursesConfig",
+    "coursework.apps.CourseworkConfig",
+    "lectures.apps.LecturesConfig",
+    "materials.apps.MaterialsConfig",
+    "posts.apps.PostsConfig",
+    "users.apps.UsersConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
