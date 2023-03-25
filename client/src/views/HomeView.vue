@@ -1,18 +1,21 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <h> blaa </h>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import axios from "axios";
 export default {
   name: "HomeView",
-  components: {
-    HelloWorld,
+  beforeCreate() {
+    this.$store.commit("initializeStore");
+    const access = this.$store.state.access;
+    if (access) {
+      axios.defaults.headers.common["Authorization"] = "JWT " + access;
+    } else {
+      axios.defaults.headers.common["Authorizaton"] = "";
+    }
   },
 };
 </script>
