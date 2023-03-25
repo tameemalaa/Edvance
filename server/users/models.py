@@ -1,22 +1,8 @@
 from django.db import models
 
 
-class UserRole(models.Model):
-    ROLE_CHOICES = [
-        (0, "Super Admin"),
-        (1, "Admin"),
-        (2, "Teacher"),
-        (3, "Teaching Assistant"),
-        (4, "Student"),
-    ]
-    role = models.CharField(max_length=1, choices=ROLE_CHOICES)
-
-    def __str__(self):
-        return f"{self.role}"
-
-
 class User(models.Model):
-    role = models.ForeignKey(UserRole, null=True, on_delete=models.SET_NULL)
+    user_name = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
@@ -25,6 +11,14 @@ class User(models.Model):
     GENDER_CHOICES = [("M", "Male"), ("F", "Female")]
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     birth_date = models.DateField()
+    ROLE_CHOICES = [
+        (0, "Super Admin"),
+        (1, "Admin"),
+        (2, "Teacher"),
+        (3, "Teaching Assistant"),
+        (4, "Student"),
+    ]
+    role = models.CharField(max_length=1, choices=ROLE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
