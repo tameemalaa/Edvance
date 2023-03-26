@@ -1,10 +1,5 @@
 <template>
-  <div style="background: #ececec; padding: 30px; height: 100%; margin: 0; position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: auto;">
+<div class="form-container">
     <a-card
       title="Log In"
       :bordered="false"
@@ -52,7 +47,7 @@
               >Remember me</a-checkbox
             >
           </a-form-item>
-          <a class="login-form-forgot" href="">Forgot password</a>
+          <a class="login-form-forgot" href="forgot-password">Forgot password</a>
         </a-form-item>
 
         <a-form-item>
@@ -124,9 +119,6 @@ export default defineComponent({
 });
 </script>
 <style>
-/* #components-form-demo-normal-login .login-form {
-  max-width: 300px;
-} */
 #components-form-demo-normal-login .login-form-forgot {
   float: right;
 }

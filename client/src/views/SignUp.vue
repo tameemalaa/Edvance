@@ -1,10 +1,5 @@
 <template>
-    <div style="background: #ececec; padding: 30px; height: 100%; margin: 0; position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: auto;">
+<div class="form-container">
     <a-card
       title="Sign Up"
       :bordered="false"
@@ -93,6 +88,7 @@
     </a-card>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 import { defineComponent, reactive } from "vue";
