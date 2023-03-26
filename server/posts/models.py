@@ -1,11 +1,11 @@
 from django.db import models
-from users.models import User
+from accounts.models import User
 from courses.models import Course, Section
 
 
 class Post(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE , null = True)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE , null = True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     text = models.TextField()

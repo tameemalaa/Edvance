@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "lectures.apps.LecturesConfig",
     "materials.apps.MaterialsConfig",
     "posts.apps.PostsConfig",
-    "users.apps.UsersConfig",
+    "accounts.apps.AccountsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -135,3 +135,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "accounts.User"
