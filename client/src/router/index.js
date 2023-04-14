@@ -20,6 +20,12 @@ const routes = [
         name: "ForgotPassword",
         component: () => import("../views/ForgotPassword.vue"),
     },
+    {
+        path: "/resetpassword",
+        name: "ResetPassword",
+        component: () => import("../views/ResetPassword.vue"),
+        props: (route) => ({token: route.query.token}),
+    },
 ];
 
 const router = createRouter({

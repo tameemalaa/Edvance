@@ -102,19 +102,16 @@ export default defineComponent({
     const disabled = computed(() => {
       return !(formState.username && formState.password);
     });
+    
     const onSubmit = async () => {
       try {
-        // Make a POST request to the Django API with the signin form data
         const response = await logIn(formState)
-
-        // If the request is successful, set the JWT token in the HTTP-only cookie and return the user data
         setJWTToken(response.data.access_token)
         router.push("/");
         console.log("Success:", response);
         return response.data.user
       } catch (error) {
         console.log("Failed:", error);
-        // If the request fails, throw an error with the error message
           alertType.value  = 'error';
           alertMessage.value  = error.response.data.message;
           alertVisible.value  = true;
