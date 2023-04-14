@@ -20,7 +20,7 @@
           :name="['user', 'username']"
           label="Username"
           :colon="false"
-          :rules="[{ required: true }]"
+          :rules="[{ required: true }, { pattern: /^[a-zA-Z0-9_]+$/, message: 'Username can only contain letters, numbers and underscores' }]"
         >
           <a-input v-model:value="formState.user.username" />
         </a-form-item>
