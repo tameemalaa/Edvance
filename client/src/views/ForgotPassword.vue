@@ -1,4 +1,6 @@
 <template>
+  <div>
+
     <div class="form-container">
       <a-card 
         title="Forgot Password"
@@ -7,6 +9,8 @@
         style="margin: 30px;
         top: 20%;"
       >
+      <Alert v-if="alertVisible" :show-icon="true" :closable="true" :type="alertType" :message = " alertMessage">
+    </Alert>
         <a-form
           :model="formState"
           :validate-messages="validateMessages"
@@ -40,13 +44,23 @@
         </a-form>
       </a-card>
     </div>
+  </div>
   </template>
   
   <script>
-  import { defineComponent, reactive, computed } from "vue";
+  import { Alert } from 'ant-design-vue';
+  import { defineComponent, reactive, computed,ref } from "vue";
   import axios from "axios";
   export default defineComponent({
+  components: {
+    Alert,
+  },
+  
     setup() {
+      const alertVisible = ref(false);
+      const alertType = ref('info');
+      const alertMessage = ref('fsfsfs');
+
       const validateMessages = {
       required: "${label} is required!",
       types: {
@@ -69,13 +83,20 @@
         localStorage.removeItem["access"];
         await axios.post("auth/rest", formState).then((response) => {
             console.log(response);
-            // TODO: Notify user that email has been sent
+            alertType.value = 'success';
+            alertMessage.value = "Email has been sent";
+            alertVisible.value = true;
           })
           .catch((error) => {
+            alertType.value  = 'error';
+            alertMessage.value  = error.response.data.message;
+            alertVisible.value  = true;
+
             console.log(error);
-            // TODO: Notify user that email has not been sent
           });
+          
       };
+
       return {
         formState,
         onFinish,
@@ -83,6 +104,9 @@
         onFinishFailed,
         disabled,
         validateMessages,
+        alertVisible,
+        alertType,
+        alertMessage,
       };
     },
   });

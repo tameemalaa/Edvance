@@ -1,5 +1,7 @@
 <template>
 <div class="form-container">
+    <Alert v-if="alertVisible" :show-icon="true" :closable="true" :type="alertType" :message = " alertMessage">
+    </Alert>
     <a-card
       title="Sign Up"
       :bordered="false"
@@ -98,12 +100,19 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from "vue";
+import { Alert } from 'ant-design-vue';
+import { defineComponent, reactive, ref } from "vue";
 import { signUp} from '../services/auth'
-import router from "../router";
 
 export default defineComponent({
+  components: {
+    Alert,
+  },
   setup() {
+    const alertVisible = ref(false);
+    const alertType = ref('info');
+    const alertMessage = ref('');
+
     const layout = {
       labelCol: {
         span: 6,
@@ -154,11 +163,17 @@ export default defineComponent({
     // Make a POST request to the Django API with the signup form data
     const response = await signUp(formState.user)
     console.log(response);
-    router.push("/login");
+    alertType.value = 'success';
+    alertMessage.value = "Verification Email has been sent";
+    alertVisible.value = true;
+
     return response.data.user
     } catch (error) {
-      // If the request fails, throw an error with the error message
-      throw new Error(error.response.data.detail)
+      alertType.value  = 'error';
+      alertMessage.value  = error.response.data.message;
+      alertVisible.value  = true;
+
+      console.log(error);
     }
 
     };
@@ -170,6 +185,9 @@ export default defineComponent({
       layout,
       validateMessages,
       validatePass,
+      alertVisible,
+      alertType,
+      alertMessage,
     };
   },
 });

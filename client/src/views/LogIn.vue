@@ -1,5 +1,8 @@
 <template>
   <div class = "form-container">
+    <Alert v-if="alertVisible" :show-icon="true" :closable="true" :type="alertType" :message = " alertMessage">
+    </Alert>
+
     <a-card
       title="Log In"
       :bordered="false"
@@ -67,7 +70,8 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, computed } from "vue";
+import { Alert } from 'ant-design-vue';
+import { defineComponent, reactive, computed,ref} from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { logIn} from '../services/auth'
 import { setJWTToken } from '../services/token'
@@ -77,6 +81,7 @@ export default defineComponent({
   components: {
     UserOutlined,
     LockOutlined,
+    Alert,
   },  
   setup() {
     const formState = reactive({
@@ -84,6 +89,10 @@ export default defineComponent({
       password: "",
       rememberMe: true,
     });
+    const alertVisible = ref(false);
+    const alertType = ref('info');
+    const alertMessage = ref('');
+
     const onFinish = (values) => {
       console.log("Success:", values);
     };
@@ -106,7 +115,9 @@ export default defineComponent({
       } catch (error) {
         console.log("Failed:", error);
         // If the request fails, throw an error with the error message
-        throw new Error(error.response.data.message)
+          alertType.value  = 'error';
+          alertMessage.value  = error.response.data.message;
+          alertVisible.value  = true;
       }
     };
     return {
@@ -115,6 +126,9 @@ export default defineComponent({
       onSubmit,
       onFinishFailed,
       disabled,
+      alertVisible,
+      alertType,
+      alertMessage,
     };
   },
 });
