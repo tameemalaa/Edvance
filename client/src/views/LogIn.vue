@@ -1,5 +1,5 @@
 <template>
-<div class="form-container">
+  <div class = "form-container">
     <a-card
       title="Log In"
       :bordered="false"
@@ -42,12 +42,12 @@
         </a-form-item>
 
         <a-form-item>
-          <a-form-item name="remember" no-style>
-            <a-checkbox v-model:checked="formState.remember"
+          <a-form-item name="rememberMe" no-style>
+            <a-checkbox v-model:checked="formState.rememberMe"
               >Remember me</a-checkbox
             >
           </a-form-item>
-          <a class="login-form-forgot" href="forgot-password">Forgot password</a>
+          <a class="login-form-forgot" href="forgotpassword">Forgot password</a>
         </a-form-item>
 
         <a-form-item>
@@ -69,19 +69,20 @@
 <script>
 import { defineComponent, reactive, computed } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-import axios from "axios";
+import { logIn} from '../services/auth'
+import { setJWTToken } from '../services/token'
 import router from "../router";
-import store from "@/store";
+
 export default defineComponent({
   components: {
     UserOutlined,
     LockOutlined,
-  },
+  },  
   setup() {
     const formState = reactive({
       username: "",
       password: "",
-      remember: true,
+      rememberMe: true,
     });
     const onFinish = (values) => {
       console.log("Success:", values);
@@ -93,20 +94,20 @@ export default defineComponent({
       return !(formState.username && formState.password);
     });
     const onSubmit = async () => {
-      localStorage.removeItem["access"];
+      try {
+        // Make a POST request to the Django API with the signin form data
+        const response = await logIn(formState)
 
-      await axios
-        .post("auth/login", formState)
-        .then((response) => {
-          console.log(response);
-          const access = response.data.access;
-          store.commit("setAccess", access);
-          axios.defaults.headers.common["Authorization"] = "JWT " + access;
-          router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        // If the request is successful, set the JWT token in the HTTP-only cookie and return the user data
+        setJWTToken(response.data.access_token)
+        router.push("/");
+        console.log("Success:", response);
+        return response.data.user
+      } catch (error) {
+        console.log("Failed:", error);
+        // If the request fails, throw an error with the error message
+        throw new Error(error.response.data.message)
+      }
     };
     return {
       formState,
@@ -124,5 +125,13 @@ export default defineComponent({
 }
 #components-form-demo-normal-login .login-form-button {
   width: 100%;
+}
+.form-container{
+  background: #ececec; padding: 30px; height: 100%; margin: 0; position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
 }
 </style>

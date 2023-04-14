@@ -58,7 +58,7 @@
           :name="['user', 'confirmPassword']"
           label="Confirm Password"
           :colon="false"
-          :rules="[{ required: true }]"
+          :rules="[{ required: true }, {validator: validatePass}]"
         >
           <a-input-password v-model:value="formState.user.confirmPassword" />
         </a-form-item>
@@ -67,16 +67,24 @@
           label="Birthdate"
           :colon="false"
           :rules="[{ required: true }]"
+          
         >
           <a-date-picker
             v-model:value="formState.user.birthdate"
             value-format="YYYY-MM-DD"
           />
         </a-form-item>
-        <a-form-item :name="['user', 'gender']" label="Gender" :colon="false">
-          <a-radio-group v-model:value="formState.gender">
-            <a-radio value="M">Male</a-radio>
-            <a-radio value="F">Female</a-radio>
+        <a-form-item  label="Gender" :colon="false" :rules="[{ required: true }]" :name="['user', 'gender']">
+          <a-radio-group v-model:value="formState.user.gender" >
+            <a-radio value="M" >Male</a-radio>
+            <a-radio value="F" >Female</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item  label="Role" :colon="false" :rules="[{ required: true }]" :name="['user', 'role']">
+          <a-radio-group v-model:value="formState.user.role">
+            <a-radio value="student">Student</a-radio>
+            <a-radio value="professor" >Professor</a-radio>
+            <a-radio value="TA" >TA</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
@@ -90,9 +98,10 @@
 </template>
 
 <script>
-import axios from "axios";
 import { defineComponent, reactive } from "vue";
+import { signUp} from '../services/auth'
 import router from "../router";
+
 export default defineComponent({
   setup() {
     const layout = {
@@ -103,6 +112,15 @@ export default defineComponent({
         span: 12,
       },
     };
+    let validatePass = async (_rule, value) => {
+      if (value === '') {
+        return Promise.reject('Please input the password again');
+      } else if (value !== formState.user.password) {
+        return Promise.reject("Two inputs don't match!");
+      } else {
+        return Promise.resolve();
+      }
+    };
     const validateMessages = {
       required: "${label} is required!",
       types: {
@@ -112,30 +130,37 @@ export default defineComponent({
       number: {
         range: "${label} must be between ${min} and ${max}",
       },
+      
     };
+
     const formState = reactive({
       user: {
-        name: "",
-        age: undefined,
+        username: "",
+        firstname: "",
+        lastname: "",
         email: "",
         password: "",
-        website: "",
-        introduction: "",
+        gender: "",
+        birthdate:"",
+        role:"",
       },
     });
     const onFinish = (values) => {
       console.log("Success:", values);
     };
     const onSubmit = async () => {
-      await axios
-        .post("auth/register", formState.user)
-        .then((response) => {
-          console.log(response);
-          router.push("/login");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
+    try {
+    // Make a POST request to the Django API with the signup form data
+    const response = await signUp(formState.user)
+    console.log(response);
+    router.push("/login");
+    return response.data.user
+    } catch (error) {
+      // If the request fails, throw an error with the error message
+      throw new Error(error.response.data.detail)
+    }
+
     };
 
     return {
@@ -144,7 +169,18 @@ export default defineComponent({
       onSubmit,
       layout,
       validateMessages,
+      validatePass,
     };
   },
 });
 </script>
+<style>
+.form-container{
+  background: #ececec; padding: 30px; height: 100%; margin: 0; position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+}
+</style>
