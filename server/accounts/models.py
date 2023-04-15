@@ -18,7 +18,7 @@ def check_email(email):
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         check_email(email)
-        check_username(username)
+        check_username(username) #TODO : remove this when serializer is working correctly
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)

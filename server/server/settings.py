@@ -154,11 +154,13 @@ REST_FRAMEWORK = {
     ),
 }
 
-SIMPLE_JWT = {
+SIMPLE_JWT = {       
+    'AUTH_HEADER_TYPES': ('JWT',),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
 }
 
 DJOSER = {
@@ -172,10 +174,10 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "username/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
-     'SERIALIZERS': {
-        'user_create': 'accounts.serializers.UserCreateSerializer',
-        'user': 'accounts.serializers.UserCreateSerializer',
-        'current_user': 'accounts.serializers.UserCreateSerializer',
+     'SERIALIZERS': { 
+        'user_create': 'accounts.serializers.UserSerializer',
+        'user': 'accounts.serializers.UserSerializer',
+        'current_user': 'accounts.serializers.CurrentUserSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     }
 }
