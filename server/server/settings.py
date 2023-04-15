@@ -179,6 +179,10 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     }
 }
+AUTHENTICATION_BACKENDS = [
+    'accounts.auth.CustomAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

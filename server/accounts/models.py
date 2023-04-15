@@ -5,11 +5,20 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 
+def check_username(username):
+    if not username:
+        raise ValueError("User must have an username")
+    if '@' in username:
+        raise ValueError("Username can't include '@'")
 
+def check_email(email):
+    if not email:
+        raise ValueError("User must have an email")
+    
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
-        if not email:
-            raise ValueError("User must have an email")
+        check_email(email)
+        check_username(username)
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
@@ -52,7 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email   ", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     @property
     def full_name(self):
