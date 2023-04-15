@@ -43,7 +43,6 @@ export function signOut() {
 export function verifyResetToken(token) {
   return axios.post('/validate/token/reset/', {"ResetToken": token},{
   }).then(response => {
-    
   return response
 })
 .catch(error=> {

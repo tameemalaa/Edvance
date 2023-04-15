@@ -49,7 +49,16 @@ export default defineComponent({
     token: {
       type: String,
       required: true
-    },  setup() {
+    }}, 
+    async mounted(){
+      if (await verifyResetToken(this.token)) {
+        console.log("Success");
+      } else {
+        router.push("/login");
+      }
+    },
+
+    setup() {
     const layout = {
       labelCol: {
         span: 6,
@@ -58,6 +67,7 @@ export default defineComponent({
         span: 12,
       },
     };
+
     let validatePass = async (_rule, value) => {
       if (value === '') {
         return Promise.reject('Please input the password again');
@@ -78,6 +88,7 @@ export default defineComponent({
       },
     });
     const onLoad = (values) => {
+      console.log("dsjsmbjs")
       if (verifyResetToken(this.token)) {
         console.log("Success:", values);
       } else {
@@ -109,7 +120,7 @@ export default defineComponent({
     };
   },
 },
-});
+);
 </script>
 <style>
 .form-container{
