@@ -1,5 +1,7 @@
 <template>
 <div class="form-container">
+  <Alert v-if="alertVisible" :show-icon="true" :closable="true" :type="alertType" :message = " alertMessage">
+    </Alert>
         <a-card
           title="Rest Password"
           :bordered="false"
@@ -40,16 +42,21 @@
     </template>
     
 <script>
-import { defineComponent, reactive } from "vue";
+import { Alert } from 'ant-design-vue';
+import { defineComponent, reactive, ref} from "vue";
 import { verifyResetToken,resetPassword} from '../services/auth'
 import router from "../router";
 
 export default defineComponent({
+  components: {
+    Alert,
+  }, 
   props: {
     token: {
       type: String,
       required: true
     }}, 
+
     async mounted(){
       if (await verifyResetToken(this.token)) {
         console.log("Success");
@@ -67,6 +74,9 @@ export default defineComponent({
         span: 12,
       },
     };
+    const alertVisible = ref(false);
+    const alertType = ref('info');
+    const alertMessage = ref('');
 
     let validatePass = async (_rule, value) => {
       if (value === '') {
@@ -105,7 +115,10 @@ export default defineComponent({
     router.push("/login");
     return response.data.password
     } catch (error) {
-        throw new Error(error.response.data.detail)
+      console.log("Failed:", error);
+          alertType.value  = 'error';
+          alertMessage.value  = error.response.data.message;
+          alertVisible.value  = true;
     }
     };
 
@@ -117,6 +130,9 @@ export default defineComponent({
       layout,
       validateMessages,
       validatePass,
+      alertVisible,
+      alertType,
+      alertMessage,
     };
   },
 },

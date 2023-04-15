@@ -37,6 +37,7 @@ export function signOut() {
     withCredentials: true
   })
     .finally(() => {
+        this.$cookies.remove('myCookie');
     })
 }
 
