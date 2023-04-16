@@ -2,11 +2,11 @@ import axios from 'axios'
 import { getJWTToken } from './token'
 
 export function logIn(username, password, rememberMe) {
-  return axios.post('/auth/login', {
+  return axios.post('/auth/jwt/create/', {
     username: username,
     password: password
   }, {
-    withCredentials: true,
+    // withCredentials: true,
     params: {
       remember: rememberMe ? 'true' : 'false'
     }
@@ -17,14 +17,14 @@ export function logIn(username, password, rememberMe) {
 }
 
 export function signUp(formData) {
-    return axios.post('/auth/register', formData)
+    return axios.post('/auth/users/', formData)
     .then(response => {
         return response
       });
 }
 
 export function refresh() {
-  return axios.post('/api/token/refresh/', {}, {
+  return axios.post('/auth/jwt/refresh/', {}, {
     withCredentials: true
   })
     .then(response => {
@@ -42,7 +42,7 @@ export function signOut() {
 }
 
 export function verifyResetToken(token) {
-  return axios.post('/validate/token/reset/', {"ResetToken": token},{
+  return axios.post('/users/reset_password_confirm', {"ResetToken": token},{
   }).then(response => {
   return response
 })
@@ -53,7 +53,7 @@ export function verifyResetToken(token) {
 }
 
 export function resetPassword(formData) {
-    return axios.post('/token/reset', formData)
+    return axios.post('/users/reset_password/', formData)
     .then(response => {
         return response
       });

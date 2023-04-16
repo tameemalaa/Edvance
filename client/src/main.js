@@ -11,5 +11,12 @@ import VueCookies from 'vue-cookies';
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:8000";
 
-createApp(App).use(Antd).use(router,axios).use(store).use(VueCookies).mount("#app");
+console.log(VueCookies);
 
+const app = createApp(App);
+app.use(Antd);
+app.use(router);
+app.use(store);
+app.use(VueCookies);
+app.config.globalProperties.$axios = axios;
+app.mount("#app");

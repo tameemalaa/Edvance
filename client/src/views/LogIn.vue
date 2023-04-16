@@ -83,6 +83,7 @@ export default defineComponent({
     LockOutlined,
     Alert,
   },  
+
   setup() {
     const formState = reactive({
       username: "",
@@ -102,10 +103,12 @@ export default defineComponent({
     const disabled = computed(() => {
       return !(formState.username && formState.password);
     });
-    
     const onSubmit = async () => {
       try {
-        const response = await logIn(formState)
+        // Make a POST request to the Django API with the signin form data
+        const response = await logIn(formState.username, formState.password, formState.rememberMe)
+
+        // If the request is successful, set the JWT token in the HTTP-only cookie and return the user data
         setJWTToken(response.data.access_token)
         router.push("/");
         console.log("Success:", response);
@@ -113,7 +116,7 @@ export default defineComponent({
       } catch (error) {
         console.log("Failed:", error);
           alertType.value  = 'error';
-          alertMessage.value  = error.response.data.message;
+          alertMessage.value  = " Invalid Credentials";
           alertVisible.value  = true;
       }
     };

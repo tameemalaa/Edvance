@@ -59,7 +59,7 @@
     setup() {
       const alertVisible = ref(false);
       const alertType = ref('info');
-      const alertMessage = ref('fsfsfs');
+      const alertMessage = ref('');
 
       const validateMessages = {
       required: "${label} is required!",

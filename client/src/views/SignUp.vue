@@ -17,73 +17,73 @@
         @submit="onSubmit"
       >
         <a-form-item
-          :name="['user', 'username']"
+          :name="['User', 'username']"
           label="Username"
           :colon="false"
           :rules="[{ required: true }, { pattern: /^[a-zA-Z0-9_]+$/, message: 'Username can only contain letters, numbers and underscores' }]"
         >
-          <a-input v-model:value="formState.user.username" />
+          <a-input v-model:value="formState.User.username" />
         </a-form-item>
         <a-form-item
-          :name="['user', 'firstname']"
+          :name="['User', 'first_name']"
           label="Firstname"
           :colon="false"
           :rules="[{ required: true }]"
         >
-          <a-input v-model:value="formState.user.firstname" />
+          <a-input v-model:value="formState.User.first_name" />
         </a-form-item>
         <a-form-item
-          :name="['user', 'lastname']"
+          :name="['User', 'last_name']"
           label="Lastname"
           :colon="false"
           :rules="[{ required: true }]"
         >
-          <a-input v-model:value="formState.user.lastname" />
+          <a-input v-model:value="formState.User.last_name" />
         </a-form-item>
         <a-form-item
-          :name="['user', 'email']"
+          :name="['User', 'email']"
           label="Email"
           :colon="false"
           :rules="[{ type: 'email', required: true }]"
         >
-          <a-input v-model:value="formState.user.email" />
+          <a-input v-model:value="formState.User.email" />
         </a-form-item>
         <a-form-item
-          :name="['user', 'password']"
+          :name="['User', 'password']"
           label="Password"
           :colon="false"
           :rules="[{ required: true }]"
         >
-          <a-input-password v-model:value="formState.user.password" />
+          <a-input-password v-model:value="formState.User.password" />
         </a-form-item>
         <a-form-item
-          :name="['user', 'confirmPassword']"
+          :name="['User', 're_password']"
           label="Confirm Password"
           :colon="false"
           :rules="[{ required: true }, {validator: validatePass}]"
         >
-          <a-input-password v-model:value="formState.user.confirmPassword" />
+          <a-input-password v-model:value="formState.User.re_password" />
         </a-form-item>
         <a-form-item
-          :name="['user', 'birthdate']"
+          :name="['User', 'birthdate']"
           label="Birthdate"
           :colon="false"
           :rules="[{ required: true }]"
           
         >
           <a-date-picker
-            v-model:value="formState.user.birthdate"
+            v-model:value="formState.User.birthdate"
             value-format="YYYY-MM-DD"
           />
         </a-form-item>
-        <a-form-item  label="Gender" :colon="false" :rules="[{ required: true }]" :name="['user', 'gender']">
-          <a-radio-group v-model:value="formState.user.gender" >
+        <a-form-item  label="Gender" :colon="false" :rules="[{ required: true }]" :name="['User', 'gender']">
+          <a-radio-group v-model:value="formState.User.gender" >
             <a-radio value="M" >Male</a-radio>
             <a-radio value="F" >Female</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item  label="Role" :colon="false" :rules="[{ required: true }]" :name="['user', 'role']">
-          <a-radio-group v-model:value="formState.user.role">
+        <a-form-item  label="Role" :colon="false" :rules="[{ required: true }]" :name="['User', 'role']">
+          <a-radio-group v-model:value="formState.User.role">
             <a-radio value="student">Student</a-radio>
             <a-radio value="professor" >Professor</a-radio>
             <a-radio value="TA" >TA</a-radio>
@@ -124,7 +124,7 @@ export default defineComponent({
     let validatePass = async (_rule, value) => {
       if (value === '') {
         return Promise.reject('Please input the password again');
-      } else if (value !== formState.user.password) {
+      } else if (value !== formState.User.password) {
         return Promise.reject("Two inputs don't match!");
       } else {
         return Promise.resolve();
@@ -143,15 +143,16 @@ export default defineComponent({
     };
 
     const formState = reactive({
-      user: {
+      User: {
         username: "",
-        firstname: "",
-        lastname: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         gender: "",
         birthdate:"",
         role:"",
+        re_password: "",
       },
     });
     const onFinish = (values) => {
@@ -160,8 +161,7 @@ export default defineComponent({
     const onSubmit = async () => {
 
     try {
-    // Make a POST request to the Django API with the signup form data
-    const response = await signUp(formState.user)
+    const response = await signUp(formState.User)
     console.log(response);
     alertType.value = 'success';
     alertMessage.value = "Verification Email has been sent";
@@ -169,11 +169,20 @@ export default defineComponent({
 
     return response.data.user
     } catch (error) {
+      console.log(error);
       alertType.value  = 'error';
-      alertMessage.value  = error.response.data.message;
+      alertMessage.value  = "";
+
+      for (const key in error.response.data) {
+          if (Object.hasOwnProperty.call(error.response.data, key)) {
+            const value = error.response.data[key];
+            alertMessage.value  += value + "\n"
+          }
+        }
+
       alertVisible.value  = true;
 
-      console.log(error);
+      
     }
 
     };
