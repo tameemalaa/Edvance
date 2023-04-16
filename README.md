@@ -18,6 +18,7 @@ DB_PORT = '5432'
 DB_API_KEY ='a646d1b0-29dd-41db-9bbd-78cf5d24c13e'
 EMAIL_HOST_USER = "gproj1566@gmail.com"
 EMAIL_HOST_PASSWORD = "lrrrhdinrzzyzaxx"
+DOMAIN = "localhost:8080"
 ```
 
 ### For frontend(Client):
