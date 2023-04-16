@@ -20,6 +20,7 @@ tzdata = "==2022.7"
 djangorestframework-simplejwt = "*"
 djoser = "*"
 django-debug-toolbar = "*"
+drf-yasg = "*"
 
 [dev-packages]
 
