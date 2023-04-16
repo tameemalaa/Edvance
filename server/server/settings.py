@@ -183,7 +183,7 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "username/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
-     'SERIALIZERS': { 
+    'SERIALIZERS': { 
         'user_create': 'accounts.serializers.UserSerializer',
         'user': 'accounts.serializers.UserSerializer',
         'current_user': 'accounts.serializers.CurrentUserSerializer',
@@ -194,6 +194,8 @@ AUTHENTICATION_BACKENDS = [
     'accounts.auth.CustomAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+DOMAIN = os.environ["DOMAIN"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
