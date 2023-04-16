@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "debug_toolbar",
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
 ]
 
 ROOT_URLCONF = "server.urls"
