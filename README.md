@@ -16,6 +16,8 @@ DB_PASSWORD = 'rE_x6jx0nJbCUBnXbOk3Bcby-M0bkAgc'
 DB_HOST = 'trumpet.db.elephantsql.com' 
 DB_PORT = '5432'
 DB_API_KEY ='a646d1b0-29dd-41db-9bbd-78cf5d24c13e'
+EMAIL_HOST_USER = "gproj1566@gmail.com"
+EMAIL_HOST_PASSWORD = "lrrrhdinrzzyzaxx"
 ```
 
 ### For frontend(Client):
