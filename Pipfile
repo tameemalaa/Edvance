@@ -20,6 +20,8 @@ tzdata = "==2022.7"
 djangorestframework-simplejwt = "*"
 djoser = "*"
 django-debug-toolbar = "*"
+drf-yasg = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
