@@ -22,6 +22,8 @@ djoser = "*"
 django-debug-toolbar = "*"
 drf-yasg = "*"
 django-cors-headers = "*"
+pytest = "*"
+pytest-django = "*"
 
 [dev-packages]
 
