@@ -50,11 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(
         max_length=1,
         choices=[
-            (0, "Super Admin"),
-            (1, "Admin"),
-            (2, "Teacher"),
-            (3, "Teaching Assistant"),
-            (4, "Student"),
+            (1, "Student"),
+            (2, "Teaching Assistant"),
+            (3, "Teacher"),
         ],
     null = True)
 
