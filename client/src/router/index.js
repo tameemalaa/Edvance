@@ -26,6 +26,12 @@ const routes = [
         component: () => import("../views/ResetPassword.vue"),
         props: (route) => ({token: route.query.token}),
     },
+    {
+        path: "/activate",
+        name: "ActivationView",
+        component: () => import("../views/ActivationView.vue"),
+        props: (route) => ({token: route.query.token, uid: route.query.uid}),
+    },
 ];
 
 const router = createRouter({

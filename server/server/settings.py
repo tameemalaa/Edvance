@@ -69,10 +69,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
 ]
+CORS_ALLOW_METHODS = ['DELETE','GET', 'OPTIONS','PATCH','POST', 'PUT',]
 
 ROOT_URLCONF = "server.urls"
 
@@ -182,7 +184,7 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm?uid={uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "username/reset/confirm?uid={uid}/{token}",
-    "ACTIVATION_URL": "activate?uid={uid}?token={token}",
+    "ACTIVATION_URL": "activate?uid={uid}&token={token}",
     'SERIALIZERS': { 
         'user_create': 'accounts.serializers.UserSerializer',
         'user': 'accounts.serializers.UserSerializer',

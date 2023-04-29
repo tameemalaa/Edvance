@@ -42,7 +42,7 @@ export function signOut() {
 }
 
 export function verifyResetToken(token) {
-  return axios.post('/users/reset_password_confirm', {"ResetToken": token},{
+  return axios.post('auth/users/reset_password_confirm', {"ResetToken": token},{
   }).then(response => {
   return response
 })
@@ -51,9 +51,22 @@ export function verifyResetToken(token) {
   return error
 })
 }
+export function verifyActivationToken(token,uid) {
+  console.log(token)
+  return axios.post('auth/users/activation/', {"token": token,"uid": uid},{
+  }).then(response => {
+  return response
+})
+.catch(error=> {
+  console.log(error)
+    error = false;
+  return false
+})
+
+}
 
 export function resetPassword(formData) {
-    return axios.post('/users/reset_password/', formData)
+    return axios.post('auth/users/reset_password/', formData)
     .then(response => {
         return response
       });

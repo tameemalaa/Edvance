@@ -15,7 +15,6 @@
             :validate-messages="validateMessages"
             @finish="onFinish"
             @submit="onSubmit"
-            @load="onLoad"
           >
             <a-form-item
               :name="['password', 'password']"
@@ -97,14 +96,7 @@ export default defineComponent({
         confirmPassword: "",
       },
     });
-    const onLoad = (values) => {
-      console.log("dsjsmbjs")
-      if (verifyResetToken(this.token)) {
-        console.log("Success:", values);
-      } else {
-        router.push("/login");
-      }
-    };
+
     const onFinish = (values) => {
       console.log("Success:", values);
     };
@@ -124,7 +116,6 @@ export default defineComponent({
 
     return {
       formState,
-      onLoad,
       onFinish,
       onSubmit,
       layout,
