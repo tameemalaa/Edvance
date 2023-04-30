@@ -43,7 +43,7 @@
 <script>
 import { Alert } from 'ant-design-vue';
 import { defineComponent, reactive, ref} from "vue";
-import { verifyResetToken,resetPassword} from '../services/auth'
+import { resetPassword} from '../services/auth'
 import router from "../router";
 
 export default defineComponent({
@@ -54,17 +54,23 @@ export default defineComponent({
     token: {
       type: String,
       required: true
-    }}, 
+    },
+    uid: {
+      type: String,
+      required: true
+    }
+  }, 
 
     async mounted(){
-      if (await verifyResetToken(this.token)) {
+
+      if (this.uid && this.token) {
         console.log("Success");
       } else {
         router.push("/login");
       }
     },
 
-    setup() {
+    setup(props) {
     const layout = {
       labelCol: {
         span: 6,
@@ -102,14 +108,14 @@ export default defineComponent({
     };
     const onSubmit = async () => {
     try {
-    const response = await resetPassword(formState.password)
+    const response = await resetPassword(formState.password, props.token, props.uid)
     console.log(response);
     router.push("/login");
     return response.data.password
     } catch (error) {
       console.log("Failed:", error);
           alertType.value  = 'error';
-          alertMessage.value  = error.response.data.message;
+          alertMessage.value  = "Something went wrong";
           alertVisible.value  = true;
     }
     };
