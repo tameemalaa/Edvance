@@ -165,7 +165,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {       
     'AUTH_HEADER_TYPES': ('JWT',),
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -182,7 +182,7 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm?uid={uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "username/reset/confirm?uid={uid}/{token}",
-    "ACTIVATION_URL": "activate?uid={uid}&token={token}",
+    "ACTIVATION_URL": "activate?uid={uid}?token={token}",
     'SERIALIZERS': { 
         'user_create': 'accounts.serializers.UserSerializer',
         'user': 'accounts.serializers.UserSerializer',
