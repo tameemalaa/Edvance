@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import AttendanceView, AttendanceScanView, qr_code
+from .views import GenerateQRAttendance, AttendanceScanView , ManualAttendance
 
 urlpatterns = [
-    path('attendance/qr/', AttendanceView.as_view(), name='attendance-qr'),
-    path('attendance/qr/<str:qr_code>/', qr_code, name='attendance-qr-code'),
-    path('attendance/scan/<str:qr_code>/', AttendanceScanView.as_view(), name='attendance-scan'),
+    path('attendance/qr/<int:lecture_id>', GenerateQRAttendance.as_view(), name='attendance-qr'),
+    path('attendance/scan/<str:lecture_id>/', AttendanceScanView.as_view(), name='attendance-scan') , 
+    path('attendance/manual/', ManualAttendance.as_view(), name='attendance-manual')
 ]

@@ -7,6 +7,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ( "student_name", "course_name" ,"student" ,  "date", "status" , "lecture" )
+        
 
 class AttendanceListSerializer(serializers.ListSerializer): 
     child = AttendanceSerializer()

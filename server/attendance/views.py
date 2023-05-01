@@ -11,16 +11,35 @@ import qrcode
 import io 
 import os 
 from django.http import HttpResponse
+from lectures.models import Lecture 
+from courses.models import Course , Section
+from rest_framework.views import APIView
+from typing import List
+from accounts.models import User 
+from accounts.permissions import IsTeacherOrAssistant
+from rest_framework.permissions import IsAuthenticated 
+class GenerateQRAttendance(APIView):
+    permission_classes = [IsAuthenticated, IsTeacherOrAssistant]
+    def get(self, request, lecture_id):
+        lecture : Lecture = get_object_or_404(Lecture, id=lecture_id)
+
+        course : Course = lecture.course
+        students :List[User]  = []
+
+        if section := lecture.section:
+            students = section.students.all()
+        elif course :
+            sections = course.section.all()
+            for section in sections:
+                students.append(section.students.all())
+
+        for student in students:
+            attendance, created = Attendance.objects.get_or_create(student=student, lecture=lecture , date = lecture.date )
+            if created:
+                attendance.status = "0"
+                attendance.save()
 
 
-class AttendanceView(generics.CreateAPIView):
-    serializer_class = AttendanceListSerializer
-
-    def post(self, request, *args, **kwargs):
-        lecture_id = request.data[0].get('lecture')
-        serializer = AttendanceSerializer(data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
         url = f"https://{os.environ.get('FRONTEND_URL')}/attendance/{lecture_id}"
         qr = qrcode.QRCode(version=1, box_size=10, border=4)
         qr.add_data(url)
@@ -30,24 +49,18 @@ class AttendanceView(generics.CreateAPIView):
         img.save(img_bytes)
         img_bytes.seek(0)
         return HttpResponse(img_bytes, content_type='image/png')
-    
 
-
-@never_cache
-def qr_code(request, qr_code):
-    attendance = Attendance.objects.filter(qr_code=qr_code).first()
-    if not attendance:
-        return HttpResponseNotFound()
-    context = {'qr_code': qr_code}
-    return render(request, 'attendance/qr_code.html', context)
-
-class AttendanceScanView(generics.UpdateAPIView):
+class ManualAttendance(generics.ListCreateAPIView):
+    # permission_classes = [IsAuthenticated, IsTeacherOrAssistant]
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+    
 
-    def patch(self, request, qr_code, *args, **kwargs):
-        attendance = get_object_or_404(Attendance, qr_code=qr_code)
-        attendance.status = request.data.get('status', 1)
+class AttendanceScanView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self , request , lecture):
+        attendance = get_object_or_404(Attendance , lecture = lecture , student = request.user )
+        attendance.status = "1"
         attendance.save()
-        serializer = self.get_serializer(attendance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+

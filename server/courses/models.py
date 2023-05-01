@@ -26,7 +26,9 @@ class Section(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    assistants = models.ManyToManyField(User, related_name="sections")
+    assistants = models.ManyToManyField(User, related_name="managed_sections") # TODO : change these names 
+    students = models.ManyToManyField(User, related_name="studied_sections")
+
 
     def __str__(self):
         return f"{self.name} - {self.course} - {self.status}"

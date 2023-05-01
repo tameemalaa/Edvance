@@ -25,11 +25,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        user = self.create_user(username, email, password=password, **extra_fields)
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        user = self.create_user(email, username, password=password, **extra_fields)
         user.is_active = True
         user.is_staff = True
-        user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
@@ -50,9 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(
         max_length=1,
         choices=[
-            (1, "Student"),
-            (2, "Teaching Assistant"),
-            (3, "Teacher"),
+            ("1", "Student"),
+            ("2", "Teaching Assistant"),
+            ("3", "Teacher"),
         ],
     null = True)
 

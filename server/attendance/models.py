@@ -12,6 +12,11 @@ class Attendance(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['student', 'lecture'], name='One lecture record per student')
+        ]
+    
 
     def __str__(self):
         return f"{self.student_id} - {self.lecture_id} - {self.status}"
