@@ -55,7 +55,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             ("3", "Teacher"),
         ],
     null = True)
-
+    
+    @property
+    def role_name(self):
+        role_dict = dict(self.ROLE_CHOICES)
+        return role_dict.get(self.role)
+    
     objects = UserManager()
 
     USERNAME_FIELD = "username"

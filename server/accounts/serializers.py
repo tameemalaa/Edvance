@@ -16,4 +16,4 @@ class CurrentUserSerializer(BaseUserSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name' , "gender", "phone", "birth_date" , "created_at")
-        
+    
