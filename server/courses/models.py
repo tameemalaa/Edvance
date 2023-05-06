@@ -31,6 +31,9 @@ class Course(models.Model):
         recipient_list = [user.email]
         send_mail(subject, message, from_email, recipient_list)
 
+    @property
+    def students(self):
+        return User.objects.filter(section_enrollment__course=self)
     
 
 
