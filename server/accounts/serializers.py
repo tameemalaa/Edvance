@@ -16,4 +16,9 @@ class CurrentUserSerializer(BaseUserSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'last_name' , "gender", "phone", "birth_date" , "created_at")
-    
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('phone', 'gender', 'birth_date', 'first_name', 'last_name')
+
