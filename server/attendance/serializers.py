@@ -11,3 +11,8 @@ class AttendanceSerializer(serializers.ModelSerializer):
 
 class AttendanceListSerializer(serializers.ListSerializer): 
     child = AttendanceSerializer()
+
+class AttendanceEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = ("status",)
