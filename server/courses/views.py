@@ -1,72 +1,42 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.decorators.http import require_http_methods
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views import View
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Course, Section
 from .serializers import CourseSerializer, SectionSerializer
-from ..accounts.models import User
+from accounts.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.views import APIView
 
 
-@method_decorator(login_required, name='dispatch')
-class CourseListView(View):
+class CourseListView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         if request.user.role == "3":
             courses = request.user.courses.all()
         elif request.user.role == "2":
-            courses = Course.objects.filter(managed_sections=request.user)
+            courses = Course.objects.filter(section__TAs=request.user).distinct()
         else:
-            courses = Course.objects.filter(section_enrollment=request.user)
-
+            courses = Course.objects.filter(section__students=request.user).distinct()
         serializer = CourseSerializer(courses, many=True)
         return Response(serializer.data)
 
-@method_decorator(login_required, name='dispatch')
-class CourseDetailView(View):
+class CourseDetailView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, pk):
         course = get_object_or_404(Course, pk=pk)
         if self.test_func(request.user, course):
             serializer = CourseSerializer(course)
             return Response(serializer.data)
         else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-    def test_func(self, user, course):
-        return user in course.teachers.all() or user in course.section.students.all() or user in course.section.TAs.all()
-
-@method_decorator(login_required, name='dispatch')
-class CourseCreateView(View):
-    def post(self, request):
-        if request.user.role != "3":
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        serializer = CourseSerializer(data=request.data)
-        if serializer.is_valid():
-            course = serializer.save()
-            course.teachers.add(request.user)
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@method_decorator(login_required, name='dispatch')
-class CourseUpdateView(View):
-    def get(self, request, pk):
+            return Response(status=status.HTTP_403_FORBIDDEN)   
+    
+    def patch(self, request, pk):
         course = get_object_or_404(Course, pk=pk)
-        if self.test_func(request.user, course):
-            serializer = CourseSerializer(course)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-    def post(self, request, pk):
-        course = get_object_or_404(Course, pk=pk)
-        if self.test_func(request.user, course):
-            serializer = CourseSerializer(course, data=request.data)
+        if self.test_func2(request.user, course):
+            serializer = CourseSerializer(course, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(status=status.HTTP_202_ACCEPTED)
@@ -77,31 +47,50 @@ class CourseUpdateView(View):
         
     def delete(self, request, pk):
         course = get_object_or_404(Course, pk=pk)
-        if self.test_func(request.user, course):
+        if self.test_func3(request.user, course):
             course.delete()
             return Response(status=status.HTTP_202_ACCEPTED)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
         
+    def test_func2(self, user, course):
+        return user in course.teachers.all()
+    
+    def test_func3(self, user, course):
+        return user == course.owner
 
     def test_func(self, user, course):
-        return user in course.teachers.all()
+        return user in course.teachers.all() or any(user in section.students.all() for section in course.section_set.all()) or any(user in section.TAs.all() for section in course.section_set.all())
 
+class CourseCreateView(APIView):
+    permission_classes = (IsAuthenticated,)
 
-
+    def post(self, request):
+        if request.user.role != "3":
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            course = serializer.save()
+            course.teachers.add(request.user)
+            course.add_owner(request.user)
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 ##SECTION
 
-@method_decorator(login_required, name='dispatch')
-class SectionCreateView(View):
+class SectionCreateView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, course_pk):
         course = get_object_or_404(Course, pk=course_pk)
         if request.user.role != "3":
             return Response(status=status.HTTP_403_FORBIDDEN)
-
-        serializer = SectionSerializer(data=request.data)
+        data = request.data
+        data['course'] = CourseSerializer(course).data
+        serializer = SectionSerializer(data=data)
         if serializer.is_valid():
             section = serializer.save(course=course)
-            # Retrieve TA object by email
             TA_email = request.data.get('TA_email')
             if TA_email:
                 try:
@@ -113,28 +102,29 @@ class SectionCreateView(View):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(login_required, name='dispatch')
-class SectionUpdateView(View):
+
+class SectionDetailView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, course_pk, section_pk):
         section = get_object_or_404(Section, pk=section_pk, course=course_pk)
-        if self.test_func(request.user, section):
+        if self.test_func2(request.user, section):
             serializer = SectionSerializer(section)
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-    def post(self, request, course_pk, section_pk):
+    def patch(self, request, course_pk, section_pk):
         section = get_object_or_404(Section, pk=section_pk, course=course_pk)
         if self.test_func(request.user, section):
-            serializer = SectionSerializer(section, data=request.data)
+            serializer = SectionSerializer(section, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(status=status.HTTP_202_ACCEPTED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        
+            return Response(status=status.HTTP_403_FORBIDDEN)    
 
     def delete(self, request, course_pk, section_pk):
         section = get_object_or_404(Section, pk=section_pk, course=course_pk)
@@ -146,10 +136,14 @@ class SectionUpdateView(View):
 
     def test_func(self, user, section):
         return user in section.course.teachers.all()
+    def test_func2(self, user, section):
+        return user in section.course.teachers.all() or user in section.TAs.all() or user in section.students.all() 
     
 #ENROLL/ADD/REMOVE
-@method_decorator(login_required, name='dispatch')
-class TeacherView(View):
+
+class TeacherView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, course_pk):
         course = get_object_or_404(Course, pk=course_pk)
         if self.test_func(request.user, course):
@@ -161,19 +155,23 @@ class TeacherView(View):
             return Response(status=status.HTTP_403_FORBIDDEN)
     def delete(self, request, course_pk):
         course = get_object_or_404(Course, pk=course_pk)
-        if self.test_func(request.user, course):
-            course = get_object_or_404(Course, pk=course_pk)
-            teacher_id = request.POST.get('teacher_id')
-            teacher = get_object_or_404(User, pk=teacher_id)
+        teacher_id = request.POST.get('teacher_id')
+        teacher = get_object_or_404(User, pk=teacher_id)
+        if self.test_func2(request.user, course, teacher):
             course.remove_teacher(teacher)
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
     def test_func(self, user, course):
-        return user in course.teachers.all()
+        return user in course.teachers.all() 
     
-@method_decorator(login_required, name='dispatch')
-class TAView(View):
+    def test_func2(self, user, course, teacher):
+        return user in course.teachers.all() and teacher != course.owner and teacher in course.teachers.all()
+    
+
+class TAView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, section_pk):
         section = get_object_or_404(Section, pk=section_pk)
         if self.test_func(request.user, section):
@@ -196,8 +194,10 @@ class TAView(View):
     def test_func(self, user, section):
         return user in section.course.teachers.all() or user in section.TAs.all()
     
-@method_decorator(login_required, name='dispatch')
-class StudentView(View):
+
+class StudentView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, section_pk):
         section = get_object_or_404(Section, pk=section_pk)
         if self.test_func(request.user, section):
@@ -219,16 +219,21 @@ class StudentView(View):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
     def test_func(self, user, section):
-        return user in section.course.teachers.all()
+        return user in section.course.teachers.all()  or user in section.TAs.all()
     
-@method_decorator(login_required, name='dispatch')
-class enroll_with_join_code(View):
+
+class enroll_with_join_code(APIView):
+    permission_classes = (IsAuthenticated,)
+    
     def post(self, request, join_code):
+
         try:
-            Section.join_student(request.user, join_code)
-        except Exception:
+            section = Section.objects.get(join_code=join_code)
+            section.join_student(request.user)
+            return Response(status=status.HTTP_200_OK)
+        except Section.DoesNotExist:
             return Response({"error": "Invalid join code"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_200_OK)
+
 
 
     
