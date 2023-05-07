@@ -4,7 +4,7 @@
 
 * Create your virtual environment `venv` and install the `requirements.txt`
 
-* Please create `.env` file at `/server/server` and paste the following.
+* Please create `.env` file at `/server` and paste the following.
 
 ```python
 SECRET_KEY = "django-insecure-un6mxt#85eik$l95pynw)4gb-vlp4f37cg*i($)oag*8(bxht$"
@@ -18,8 +18,11 @@ DB_PORT = '5432'
 DB_API_KEY ='a646d1b0-29dd-41db-9bbd-78cf5d24c13e'
 EMAIL_HOST_USER = "gproj1566@gmail.com"
 EMAIL_HOST_PASSWORD = "lrrrhdinrzzyzaxx"
+DOMAIN = "localhost:8080"
 ```
 
 ### For frontend(Client):
 
-* Create it and commit it xD
+at `/client`:
+* run `npm install`
+* runn `npm run serve`

@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "debug_toolbar",
+    'corsheaders',
     'drf_yasg',
+
 ]
 
 MIDDLEWARE = [
@@ -64,6 +66,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
 ]
 
 ROOT_URLCONF = "server.urls"
@@ -172,10 +180,10 @@ DJOSER = {
     "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
-    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "username/reset/confirm/{uid}/{token}",
-    "ACTIVATION_URL": "activate/{uid}/{token}",
-     'SERIALIZERS': { 
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm?uid={uid}/{token}",
+    "USERNAME_RESET_CONFIRM_URL": "username/reset/confirm?uid={uid}/{token}",
+    "ACTIVATION_URL": "activate?uid={uid}?token={token}",
+    'SERIALIZERS': { 
         'user_create': 'accounts.serializers.UserSerializer',
         'user': 'accounts.serializers.UserSerializer',
         'current_user': 'accounts.serializers.CurrentUserSerializer',
@@ -186,6 +194,8 @@ AUTHENTICATION_BACKENDS = [
     'accounts.auth.CustomAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+DOMAIN = os.environ["DOMAIN"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

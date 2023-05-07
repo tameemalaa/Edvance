@@ -1,4 +1,6 @@
 env
 .env
 *.pyc
+client/node_modules
 .venv
+server/*/migrations
