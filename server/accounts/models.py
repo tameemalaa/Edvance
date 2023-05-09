@@ -54,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             ("2", "Teaching Assistant"),
             ("3", "Teacher"),
         ],
-    null = True)
+    default=1 )
     
     @property
     def role_name(self):
