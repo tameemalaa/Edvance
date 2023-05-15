@@ -3,7 +3,7 @@ from accounts.models import User
 from courses.models import Course, Section
 from lectures.models import Lecture
 
-TEACHER = "1"
+TEACHER = "3"
 ASSISTANT = "2"
 
 

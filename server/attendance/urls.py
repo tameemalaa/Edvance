@@ -2,14 +2,14 @@ from django.urls import path
 from .views import (
     GenerateQRAttendance,
     AttendanceScan,
-    TeacherManualAttendance,
+    TeacherManualLectureAttendance,
     StudentAttendance,
     StudentCourseAttendance,
     StudentSectionAttendance,
     TeacherCourseAttendance,
     TeacherSectionAttendance,
     TeacherLectureAttendance,
-    EditAttendanceEntry,
+    AttendanceUpdateStatusView,
 )
 
 urlpatterns = [
@@ -32,7 +32,7 @@ urlpatterns = [
     ),
     path(
         "teacher/manual/<int:lecture_id>",
-        TeacherManualAttendance.as_view(),
+        TeacherManualLectureAttendance.as_view(),
         name="take-manual-attendance",
     ),
     path(
@@ -51,8 +51,8 @@ urlpatterns = [
         name="teacher-lecture-attendance",
     ),
     path(
-        "teacher/edit/<int:attendance_id>",
-        EditAttendanceEntry.as_view(),
-        name="edit-attendance-entry",
+        "teacher/edit/<int:lecture_id>",
+        AttendanceUpdateStatusView.as_view(),
+        name="edit-attendance-entries",
     ),
 ]
