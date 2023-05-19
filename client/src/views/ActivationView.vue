@@ -1,7 +1,6 @@
 <template>
 <div> Activating</div>
 </template>
-        
     <script>
     import { defineComponent} from "vue";
     import { verifyActivationToken} from '../services/auth'
