@@ -189,10 +189,11 @@ class AttendanceUpdateStatusView(generics.GenericAPIView):
             return Response(update_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         updated_attendances = []
         for attendance_entry in update_request_serializer.validated_data:
-            pk = attendance_entry["id"]
+            student_id = attendance_entry["student_id"]
+            lecture_id = self.kwargs["lecture_id"]
             status_update = attendance_entry["status"]
 
-            attendance = get_object_or_404(Attendance, pk=pk)
+            attendance = get_object_or_404(Attendance, student__id =student_id , lecture__id=lecture_id)
             attendance.status = status_update
             attendance.save()
             updated_attendances.append(attendance)

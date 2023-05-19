@@ -23,9 +23,15 @@ class AttendanceCreateSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         lecture_id = self.context['request'].parser_context['kwargs']['lecture_id']
+        user_id = validated_data['student'].id
         lecture = get_object_or_404(Lecture, id=lecture_id)
-        instance = Attendance.objects.create(lecture = lecture, **validated_data)
-        return instance
+        if attendance_entry := Attendance.objects.filter(
+            lecture__id=lecture_id, student__id=user_id
+        ).first():
+            attendance_entry.status = validated_data['status']
+        else:
+            attendance_entry = Attendance.objects.create(lecture = lecture, **validated_data)
+        return attendance_entry
     
 
 class AttendanceCreateListSerializer(serializers.ListSerializer):
@@ -33,7 +39,7 @@ class AttendanceCreateListSerializer(serializers.ListSerializer):
 
 
 class AttendancePartialUpdateSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    student_id = serializers.IntegerField()
     status = serializers.ChoiceField(choices=ABSENCE_STATUS_CHOICES)
     class Meta:
         list_serializer_class = serializers.ListSerializer

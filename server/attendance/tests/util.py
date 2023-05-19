@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from courses.models import Course, Section
 from lectures.models import Lecture
+from attendance.models import Attendance
 import random
 import string
+from datetime import datetime
 
 User = get_user_model()
 
@@ -69,3 +71,6 @@ def generate_test_lecture(course=None , section= None):
     else: 
         raise ValueError("Either course or section must be provided")
     
+
+def generate_test_attendance_entry(lecture:Lecture , student:User , status:str = "0"):
+    return Attendance.objects.create(lecture = lecture , student = student , status = status, date = datetime.now()) 
