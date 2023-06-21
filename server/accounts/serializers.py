@@ -6,7 +6,7 @@ User = get_user_model()
 class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'role' ,'last_name' , "gender", "phone", "birth_date" , "created_at")
+        fields = ('id', 'username', 'email', 'first_name', 'role' ,'last_name' , "gender", "phone", "birth_date" , "created_at" , "password")
         required_fields = ('email', 'username' , )
     def validate_username(self, value):
         if '@' in value:
