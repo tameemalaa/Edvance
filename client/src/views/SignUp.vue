@@ -84,9 +84,9 @@
         </a-form-item>
         <a-form-item  label="Role" :colon="false" :rules="[{ required: true }]" :name="['User', 'role']">
           <a-radio-group v-model:value="formState.User.role">
-            <a-radio value="student">Student</a-radio>
-            <a-radio value="professor" >Professor</a-radio>
-            <a-radio value="TA" >TA</a-radio>
+            <a-radio value=1>Student</a-radio>
+            <a-radio value=2 >Teaching Assistant</a-radio>
+            <a-radio value=3 >Professor</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
