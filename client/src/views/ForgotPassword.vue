@@ -81,7 +81,7 @@
       });
       const onSubmit = async () => {
         localStorage.removeItem["access"];
-        await axios.post("auth/rest", formState).then((response) => {
+        await axios.post("auth/users/reset_password/", formState).then((response) => {
             console.log(response);
             alertType.value = 'success';
             alertMessage.value = "Email has been sent";
