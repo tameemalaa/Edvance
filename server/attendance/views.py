@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from .models import Attendance
 from .serializers import (
     AttendanceSerializer,
-    AttendanceListSerializer,
-    AttendanceEditSerializer,
-)
+    AttendancePartialUpdateSerializer,
+    AttendanceListPartialUpdateSerializer,
+    AttendanceCreateSerializer ,
+    )
 from django.shortcuts import get_object_or_404
 import qrcode
 import io
@@ -21,7 +22,7 @@ from rest_framework.permissions import IsAuthenticated
 import jwt
 import datetime
 from datetime import timezone
-
+from django.shortcuts import get_object_or_404
 
 
 
@@ -55,7 +56,7 @@ class GenerateQRAttendance(APIView):
         payload = {
             "lecture_id": lecture_id,
             "exp": datetime.datetime.now(tz=timezone.utc)
-            + datetime.timedelta(seconds=expire_time_in_minutes * 60),
+            + datetime.timedelta(seconds=int(expire_time_in_minutes) * 60),
         }
         secret = os.environ.get("SECRET_KEY")
         token = jwt.encode(payload, secret, algorithm="HS256")
@@ -65,7 +66,7 @@ class GenerateQRAttendance(APIView):
         qr.make(fit=True)
         img = qr.make_image()
         img_bytes = io.BytesIO()
-        img.save(img_bytes)
+        img.save(img_bytes , "PNG")
         img_bytes.seek(0)
         return img_bytes
 
@@ -91,15 +92,27 @@ class AttendanceScan(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class TeacherManualAttendance(generics.ListCreateAPIView):
+class TeacherManualLectureAttendance(generics.GenericAPIView):
     permission_classes = [IsAuthenticated, IsLectureTeacher]
+    serializer_class = AttendanceCreateSerializer
     queryset = Attendance.objects.all()
-    serializer_class = AttendanceSerializer
+    
+    def post(self , request , *args , **kwargs):
+        data = request.data
+        if not isinstance(data, list):
+            data = [data]
+
+        serializer = self.get_serializer(data=data, many=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
 
 
 class StudentAttendance(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = AttendanceListSerializer
+    serializer_class = AttendanceSerializer
 
     def get_queryset(self):
         return Attendance.objects.filter(student=self.request.user)
@@ -107,7 +120,7 @@ class StudentAttendance(generics.ListAPIView):
 
 class StudentCourseAttendance(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = AttendanceListSerializer
+    serializer_class = AttendanceSerializer
 
     def get_queryset(self):
         course_id = self.kwargs["course_id"]
@@ -118,7 +131,7 @@ class StudentCourseAttendance(generics.ListAPIView):
 
 class StudentSectionAttendance(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = AttendanceListSerializer
+    serializer_class = AttendanceSerializer
 
     def get_queryset(self):
         section_id = self.kwargs["section_id"]
@@ -129,7 +142,7 @@ class StudentSectionAttendance(generics.ListAPIView):
 
 class TeacherCourseAttendance(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsCourseTeacher]
-    serializer_class = AttendanceListSerializer
+    serializer_class = AttendanceSerializer
 
     def get_queryset(self):
         course_id = self.kwargs["course_id"]
@@ -138,7 +151,7 @@ class TeacherCourseAttendance(generics.ListAPIView):
 
 class TeacherSectionAttendance(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsSectionTeacher]
-    serializer_class = AttendanceListSerializer
+    serializer_class = AttendanceSerializer
 
     def get_queryset(self):
         section_id = self.kwargs["section_id"]
@@ -147,16 +160,46 @@ class TeacherSectionAttendance(generics.ListAPIView):
 
 class TeacherLectureAttendance(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsLectureTeacher]
-    serializer_class = AttendanceListSerializer
-
+    serializer_class = AttendanceSerializer
+    
     def get_queryset(self):
         lecture_id = self.kwargs["lecture_id"]
         return Attendance.objects.filter(lecture__id=lecture_id)
 
 
-class EditAttendanceEntry(generics.UpdateAPIView):
-    allowed_methods = ["PATCH"]
+
+
+class AttendanceUpdateStatusView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated, IsLectureTeacher]
-    serializer_class = AttendanceEditSerializer
-    queryset = Attendance.objects.all()
-    lookup_field = "id"
+    serializer_class = AttendanceListPartialUpdateSerializer
+    
+    def get_queryset(self):
+        lecture_id = self.kwargs["lecture_id"]
+        return Attendance.objects.filter(lecture__id=lecture_id)
+    
+    def patch(self, request, *args , **kwargs):
+        attendance_data = request.data
+
+        if not isinstance(attendance_data, list):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        update_request_serializer = self.get_serializer(data=attendance_data)
+
+        if not update_request_serializer.is_valid():
+            return Response(update_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        updated_attendances = []
+        for attendance_entry in update_request_serializer.validated_data:
+            student_id = attendance_entry["student_id"]
+            lecture_id = self.kwargs["lecture_id"]
+            status_update = attendance_entry["status"]
+
+            attendance = get_object_or_404(Attendance, student__id =student_id , lecture__id=lecture_id)
+            attendance.status = status_update
+            attendance.save()
+            updated_attendances.append(attendance)
+
+        response_serializer = AttendanceSerializer(updated_attendances, many=True)
+        return Response(response_serializer.data)
+        
+        
+        
