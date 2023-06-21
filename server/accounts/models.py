@@ -54,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             ("2", "Teaching Assistant"),
             ("3", "Teacher"),
         ],
-    default=1 )
+        default="1",)
     
     @property
     def role_name(self):
@@ -64,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name" , "role"]
 
     @property
     def full_name(self):
