@@ -1,16 +1,18 @@
 <template>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet"> -->
 
-    <div id="video-background">
-      <h1> blaa </h1>
+    <!-- <div id="video-background">
       <div class="video-foreground">
     <iframe width="1280" height="720" :src=link  title="Rick Roll (Different link + no ads)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
   
   </div>
 
-  </div>
+  </div> -->
+
+  <h1> Edvance </h1>
+  
 </template>
 
 <script>
@@ -41,9 +43,9 @@ export default {
 </script>
 <style scoped>
 h1 {
-  font-family: 'Cedarville Cursive', cursive;
+  /* font-family: 'Cedarville Cursive', cursive; */
   font-size: 500px;
-  color: purple;
+  color: black;
   }
 
   #video-background {
