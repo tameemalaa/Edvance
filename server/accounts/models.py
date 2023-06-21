@@ -55,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(
         max_length=1,
         choices=ROLE_CHOICES,
-    null = True)
+        default="1",)
     
     @property
     def role_name(self):
@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name" , "role"]
 
     @property
     def full_name(self):

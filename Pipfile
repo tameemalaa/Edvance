@@ -24,6 +24,8 @@ drf-yasg = "*"
 django-cors-headers = "*"
 pytest = "*"
 pytest-django = "*"
+pyjwt = "*"
+pillow = "*"
 
 [dev-packages]
 

@@ -105,11 +105,8 @@ export default defineComponent({
     });
     const onSubmit = async () => {
       try {
-        // Make a POST request to the Django API with the signin form data
         const response = await logIn(formState.username, formState.password, formState.rememberMe)
-
-        // If the request is successful, set the JWT token in the HTTP-only cookie and return the user data
-        setJWTToken(response.data.access_token)
+        setJWTToken(response.data.access)
         router.push("/");
         console.log("Success:", response);
         return response.data.user

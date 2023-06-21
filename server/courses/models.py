@@ -42,6 +42,9 @@ class Course(models.Model):
             self.owner_id = kwargs.pop('owner_id', None)
         super().save(*args, **kwargs)
 
+    @property
+    def students(self):
+        return User.objects.filter(section_enrollment__course=self)
     
 
 
