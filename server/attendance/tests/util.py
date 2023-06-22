@@ -74,3 +74,4 @@ def generate_test_lecture(course=None , section= None):
 
 def generate_test_attendance_entry(lecture:Lecture , student:User , status:str = "0"):
     return Attendance.objects.create(lecture = lecture , student = student , status = status, date = datetime.now()) 
+

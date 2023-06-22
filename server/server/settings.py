@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     "attendance.apps.AttendanceConfig",
     "courses.apps.CoursesConfig",
     "coursework.apps.CourseworkConfig",
@@ -167,7 +168,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {       
     'AUTH_HEADER_TYPES': ('JWT',),
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -206,3 +207,7 @@ EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 EMAIL_USE_TLS = True
 
+
+JAZZMIN_SETTINGS = {
+    "related_modal_active": True,
+}
