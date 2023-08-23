@@ -1,0 +1,13 @@
+version: '3'
+services:
+  frontend:
+    image: frontend:dev
+    ports:
+      - "8080:8080"
+    command: "npm run build && npm run start"
+
+  backend:
+    image: backend:dev
+    ports:
+      - "8000:8000"
+    command: "sh -c 'python manage.py collectstatic -- && gunicorn server.wsgi'"

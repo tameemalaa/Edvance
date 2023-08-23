@@ -1,0 +1,16 @@
+FROM python:3.9 
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+
+WORKDIR /app
+
+COPY . .
+
+COPY ../.env . 
+
+RUN pip install -r requirements.txt
+
