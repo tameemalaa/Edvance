@@ -6,3 +6,4 @@ client/node_modules
 server/*/migrations
 /venv
 */static/
+server/general.log
